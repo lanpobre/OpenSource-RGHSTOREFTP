@@ -6,6 +6,7 @@ const os = require("os");
 const https = require("https");
 const StreamZip = require("node-stream-zip");
 const { exec } = require("child_process");
+const { autoUpdater } = require("electron-updater");
 
 let mainWindow;
 let client = new ftp.Client();
@@ -38,6 +39,21 @@ function createWindow() {
 
     createMenu();
 }
+
+app.whenReady().then(() => {
+  createWindow();
+
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on("update-available", () => {
+    console.log("Atualização disponível.");
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    console.log("Atualização baixada.");
+    autoUpdater.quitAndInstall();
+  });
+});
 
 function createMenu() {
     const template = [
