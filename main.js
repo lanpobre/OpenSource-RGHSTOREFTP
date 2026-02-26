@@ -1,16 +1,25 @@
 const { app, BrowserWindow, ipcMain, Menu, shell } = require("electron");
 const path = require("path");
-const ftp = require("basic-ftp");
 const fs = require("fs");
 const os = require("os");
 const https = require("https");
-const StreamZip = require("node-stream-zip");
 const { exec } = require("child_process");
+
+const ftp = require("basic-ftp");
+const StreamZip = require("node-stream-zip");
 const { autoUpdater } = require("electron-updater");
 
 let mainWindow;
+
 let client = new ftp.Client();
 let connectionConfig = null;
+
+/* ============================= */
+/*        AUTO UPDATER CONFIG    */
+/* ============================= */
+
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
 
 const configPath = path.join(app.getPath("userData"), "config.json");
 
@@ -22,7 +31,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 720,
-        show: false, // evita piscar
+        show: false,
         autoHideMenuBar: false,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
@@ -33,36 +42,58 @@ function createWindow() {
     mainWindow.loadFile("app/index.html");
 
     mainWindow.once("ready-to-show", () => {
-        mainWindow.maximize(); // inicia maximizado
+        mainWindow.maximize();
         mainWindow.show();
     });
 
     createMenu();
 }
 
-app.whenReady().then(() => {
-  createWindow();
+/* ============================= */
+/*        AUTO UPDATE            */
+/* ============================= */
 
-  autoUpdater.checkForUpdatesAndNotify();
+function initAutoUpdate() {
+    autoUpdater.checkForUpdatesAndNotify();
 
-  autoUpdater.on("update-available", () => {
-    console.log("Atualização disponível.");
-  });
+    autoUpdater.on("checking-for-update", () => {
+        console.log("Verificando atualização...");
+    });
 
-  autoUpdater.on("update-downloaded", () => {
-    console.log("Atualização baixada.");
-    autoUpdater.quitAndInstall();
-  });
-});
+    autoUpdater.on("update-available", () => {
+        console.log("Atualização disponível.");
+    });
+
+    autoUpdater.on("update-not-available", () => {
+        console.log("Nenhuma atualização encontrada.");
+    });
+
+    autoUpdater.on("error", (err) => {
+        console.log("Erro no auto-update:", err);
+    });
+
+    autoUpdater.on("download-progress", (progressObj) => {
+        console.log(`Download: ${Math.round(progressObj.percent)}%`);
+    });
+
+    autoUpdater.on("update-downloaded", () => {
+        console.log("Atualização baixada. Reiniciando...");
+        autoUpdater.quitAndInstall();
+    });
+}
+
+/* ============================= */
+/*            MENU               */
+/* ============================= */
 
 function createMenu() {
     const template = [
         {
             label: "Arquivo",
             submenu: [
-                { role: "reload", label: "Recarregar"},
+                { role: "reload", label: "Recarregar" },
                 { type: "separator" },
-                { role: "quit", label: "Sair"  }
+                { role: "quit", label: "Sair" }
             ]
         },
         {
@@ -105,7 +136,20 @@ function createMenu() {
     Menu.setApplicationMenu(menu);
 }
 
-app.whenReady().then(createWindow);
+/* ============================= */
+/*         APP READY             */
+/* ============================= */
+
+app.whenReady().then(() => {
+    createWindow();
+    initAutoUpdate();
+});
+
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+        app.quit();
+    }
+});
 
 /* ============================= */
 /*        FTP CONNECT            */
