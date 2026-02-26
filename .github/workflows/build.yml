@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build Electron App RGH
 
 on:
   push:
@@ -6,25 +6,31 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: write   # NECESSÁRIO para criar release
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: 🔨 Build App
         run: npm run build
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📤 Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RGH-STORE-FTP-Build
+          path: dist/
