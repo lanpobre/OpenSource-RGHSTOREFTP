@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
@@ -54,31 +54,39 @@ function createWindow() {
 /* ============================= */
 
 function initAutoUpdate() {
-    autoUpdater.checkForUpdatesAndNotify();
 
-    autoUpdater.on("checking-for-update", () => {
-        console.log("Verificando atualização...");
-    });
+    autoUpdater.autoDownload = false;
+
+    autoUpdater.checkForUpdates();
 
     autoUpdater.on("update-available", () => {
-        console.log("Atualização disponível.");
+        dialog.showMessageBox(mainWindow, {
+            type: "info",
+            title: "Atualização disponível",
+            message: "Nova versão disponível. Deseja atualizar agora?",
+            buttons: ["Atualizar", "Depois"]
+        }).then(result => {
+            if (result.response === 0) {
+                autoUpdater.downloadUpdate();
+            }
+        });
     });
 
-    autoUpdater.on("update-not-available", () => {
-        console.log("Nenhuma atualização encontrada.");
-    });
-
-    autoUpdater.on("error", (err) => {
-        console.log("Erro no auto-update:", err);
-    });
-
-    autoUpdater.on("download-progress", (progressObj) => {
-        console.log(`Download: ${Math.round(progressObj.percent)}%`);
+    autoUpdater.on("download-progress", (progress) => {
+        console.log(`Baixando: ${Math.round(progress.percent)}%`);
     });
 
     autoUpdater.on("update-downloaded", () => {
-        console.log("Atualização baixada. Reiniciando...");
-        autoUpdater.quitAndInstall();
+        dialog.showMessageBox(mainWindow, {
+            type: "info",
+            title: "Atualização pronta",
+            message: "Atualização baixada. Reiniciar agora?",
+            buttons: ["Reiniciar", "Depois"]
+        }).then(result => {
+            if (result.response === 0) {
+                autoUpdater.quitAndInstall();
+            }
+        });
     });
 }
 
@@ -466,3 +474,4 @@ ipcMain.handle("check-app-installed", async (event, appName) => {
         return { success: false };
     }
 });
+
