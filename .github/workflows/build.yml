@@ -1,13 +1,15 @@
-name: Build Electron App rgh
+name: Build Electron App RGH
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: write   # NECESSÁRIO para criar release
+
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
@@ -20,10 +22,12 @@ jobs:
           node-version: 20
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: 🔨 Build App
         run: npm run build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📤 Upload Build Artifact
         uses: actions/upload-artifact@v4
