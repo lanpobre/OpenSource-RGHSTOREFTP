@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RGH STORE FTP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topBar">
+
+    <div class="left">
+        <span id="connectionStatus">🔴 OFFLINE</span>
+        <span id="hddInfo"></span>
+    </div>
+
+    <div class="right loginBar">
+        <input id="host" value="192.168.1." placeholder="IP Xbox">
+        <input id="user" value="xboxftp">
+        <input id="pass" type="password" value="xboxftp">
+        <button onclick="connect()">Conectar</button>
+        <button onclick="scanXbox()">Buscar na Rede 🔍</button>
+    </div>
+
+</div>
+
+<!-- STORE -->
+<div id="storeScreen">
+
+    <div class="topbar">
+        <h2>STORE RGH</h2>
+		<input id="searchBox" type="text" placeholder="🔍 Pesquisar apps...(BETA)" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+    </div>
+
+    <div id="store" class="store"></div>
+
+    <div class="progressBox">
+        <div id="progressBar"></div>
+    </div>
+
+</div>
+
+<div id="aboutModal" class="about-overlay">
+    <div class="about-box">
+        <h2>RGH STORE FTP</h2>
+        <p>Versão 1.0.0</p>
+        <p>Desenvolvido por<br><strong>Nickolas Bressy</strong></p>
+        <button onclick="closeAbout()">Fechar</button>
+    </div>
+</div>
+<script src="renderer.js"></script>
+<script>
+window.api.onAbout(() => {
+    document.getElementById("aboutModal").classList.add("active");
+});
+
+function closeAbout() {
+    document.getElementById("aboutModal").classList.remove("active");
+}
+</script>
+</body>
+</html>

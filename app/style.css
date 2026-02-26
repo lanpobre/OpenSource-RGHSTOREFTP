@@ -1,0 +1,207 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #0a0a0a, #111);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* LOGIN */
+
+.center {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #111 0%, #000 100%);
+}
+
+.center h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    color: #00ff99;
+}
+
+input {
+    width: 260px;
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+    background: #1a1a1a;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    box-shadow: 0 0 10px #00ff99;
+}
+
+button {
+    width: 260px;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #00ff99, #00cc88);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ff99;
+}
+
+/* STORE */
+
+.topbar {
+    padding: 20px;
+    background: #0f0f0f;
+    border-bottom: 2px solid #00ff99;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.store {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    padding: 30px;
+}
+
+/* CARD */
+
+.card {
+    background: linear-gradient(145deg, #151515, #0f0f0f);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+    box-shadow: 0 0 10px #000;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px #00ff99;
+}
+
+.card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.card h3 {
+    padding: 15px;
+    font-size: 18px;
+}
+
+.card button {
+    width: 90%;
+    margin: 0 5% 15px 5%;
+}
+
+/* PROGRESS BAR */
+
+.progressBox {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #111;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #00ff99, #00cc88);
+    transition: width 0.2s ease;
+}
+
+.card button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    background: #2ecc71;
+    color: white;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.card button:hover {
+    transform: scale(1.05);
+}
+
+.card button.installed {
+    background: #3498db;
+}
+
+ /* POPUP ABOUT */
+ 
+ .about-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease;
+}
+
+.about-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.about-box {
+    background: #1c1c1c;
+    padding: 30px;
+    width: 350px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(0,255,120,0.4);
+    animation: fadeIn 0.3s ease;
+}
+
+.about-box h2 {
+    margin-top: 0;
+    color: #00ff88;
+}
+
+.about-box p {
+    margin: 10px 0;
+    color: #ccc;
+}
+
+.about-box button {
+    margin-top: 20px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #00ff88;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.about-box button:hover {
+    opacity: 0.8;
+}
+
+@keyframes fadeIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
