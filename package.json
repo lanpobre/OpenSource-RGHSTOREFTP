@@ -1,6 +1,6 @@
 {
   "name": "rgh-store-ftp",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "RGH STORE FTP - Xbox 360 RGH Manager",
   "main": "main.js",
   "author": "Nickolas Bressy",
