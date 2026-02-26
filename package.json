@@ -36,11 +36,11 @@
 },
   "dependencies": {
     "basic-ftp": "^5.0.4",
-    "electron-updater": "^6.8.3",
     "node-stream-zip": "^1.15.0"
   },
   "devDependencies": {
     "electron": "^28.0.0",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+	"electron-updater": "^6.8.3"
   }
 }
